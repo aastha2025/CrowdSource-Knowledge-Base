@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Footer Example</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../home page/styles.css">
     
 </head>
 <body>
@@ -32,18 +32,18 @@
                 <div class="col-md-3 footer-section">
                     <h5>Know More</h5>
                     <ul class="list-unstyled text-center">
-                        <li><a href="../Entry/login.php">About</a></li>
-                        <li><a href="../Entry/login.php">Career</a></li>
-                        <li><a href="../Entry/login.php">Contact</a></li>
+                        <li><a href="./about.php">About</a></li>
+                        <li><a href="./career.php">Career</a></li>
+                        <li><a href="./contact.php">Contact</a></li>
                     </ul>
                 </div>
             </div>
         </div>
     </footer>
-
-    <!-- Include Bootstrap's JavaScript and jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <!-- Include Bootstrap's JavaScript and jQuery -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>

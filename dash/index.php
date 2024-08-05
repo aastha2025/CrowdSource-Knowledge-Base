@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CKnowledge Base</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../home page/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
@@ -13,7 +13,7 @@
 
 <body>
     <!-- Navbar -->
-    <?php include "./Navbar.php" ?>
+    <?php include "./nav.php" ?>
 
 
     <!-- Main Content -->
@@ -24,12 +24,12 @@
             <div class="col-md-4 sidebar">
                 <h4 class="ml-2">Categories</h4>
                 <ul class="list-group">
-                    <li class="list-group-item"><a href="../Entry/login.php">Machine Learning</a></li>
-                    <li class="list-group-item"><a href="../Entry/login.php">Artificial Intelligence</a></li>
-                    <li class="list-group-item"><a href="../Entry/login.php">Data Science</a></li>
-                    <li class="list-group-item"><a href="../Entry/login.php">Machine Learning</a></li>
-                    <li class="list-group-item"><a href="../Entry/login.php">Artificial Intelligence</a></li>
-                    <li class="list-group-item"><a href="../Entry/login.php">Data Science</a></li>
+                    <li class="list-group-item"><a href="#">Machine Learning</a></li>
+                    <li class="list-group-item"><a href="#">Artificial Intelligence</a></li>
+                    <li class="list-group-item"><a href="#">Data Science</a></li>
+                    <li class="list-group-item"><a href="#">Machine Learning</a></li>
+                    <li class="list-group-item"><a href="#">Artificial Intelligence</a></li>
+                    <li class="list-group-item"><a href="#">Data Science</a></li>
                     <!-- Add more related topics as needed -->
                 </ul>
             </div>
@@ -46,13 +46,13 @@
                         <div class="container mt-3">
                             <div class="row">
                                 <div class="col-md-6 mb-2">
-                                    <a href="../Entry/login.php" class="btn btn-custom-ask btn-block">Ask</a>
+                                    <a href="ask.php" class="btn btn-custom-ask btn-block">Ask</a>
                                 </div>
                                 <!-- <div class="col-md-4 mb-2">
                                     <a href="answer.php" class="btn btn-custom-answer btn-block">Answer</a>
                                 </div> -->
                                 <div class="col-md-6 mb-2">
-                                    <a href="../Entry/login.php" class="btn btn-custom-post btn-block">Post</a>
+                                    <a href="post.php" class="btn btn-custom-post btn-block">Post</a>
                                 </div>
                             </div>
                         </div>

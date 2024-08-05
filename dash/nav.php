@@ -7,26 +7,26 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item mx-2">
-                    <a class="nav-link" href="../Entry/login.php">Home</a>
+                    <a class="nav-link" href="./index.php">Home</a>
                 </li>
                 <li class="nav-item mx-2">
-                    <a class="nav-link" href="../Entry/login.php">Q/A</a>
+                    <a class="nav-link" href="../quesAns/que.php">Q/A</a>
                 </li>
                 <li class="nav-item mx-2">
-                    <a class="nav-link" href="../Entry/login.php">Notifications</a>
+                    <a class="nav-link" href="../notification/notification.php">Notifications</a>
                 </li>
                 <li class="nav-item mx-2">
-                    <a class="nav-link" href="../Entry/login.php">Category</a>
+                    <a class="nav-link" href="../category/category.php">Category</a>
                 </li>
                 <li class="nav-item mx-2">
-                    <a class="nav-link" href="../Entry/login.php">Profile</a>
+                    <a class="nav-link" href="../profile/profile.php">Profile</a>
                 </li>
-                <li class="nav-item mx-2">
+                <!-- <li class="nav-item mx-2">
                     <a class="nav-link" href="../Entry/login.php">Login</a>
                 </li>
                 <li class="nav-item mx-2">
                     <a class="nav-link" href="../Entry/registration.php">Register</a>
-                </li>
+                </li> -->
                 <li class="nav-item mx-2">
                     <form class="form-inline my-2 my-lg-0">
                         <input class="form-control mr-sm-2" type="search" placeholder="Search Knowledge" aria-label="Search">

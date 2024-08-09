@@ -151,9 +151,7 @@
             } else {
                 $file = "../postimage/" . basename($addimage['name']);
                 $upload = 1;
-                $fileType = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-
-                $check = getimagesize($addimage['tmp_name']);
+                
                 if ($check === false) {
                     $upload = 0;
                     $errors[] = '<div class="alert alert-danger alert-dismissible fade show m-4" role="alert">
@@ -197,7 +195,7 @@
     ?>
     
     <div class="container1">
-        <h1 class="text-center"><span style="color: #06759A;">Create Post</span></h1>
+        <h1 class="text-center">Create<span style="color: #06759A;"> Post</span></h1>
         <form id="postForm" method="post" action="" enctype="multipart/form-data">
             <label for="title">Post Title:</label>
             <input type="text" id="title" name="title" required>

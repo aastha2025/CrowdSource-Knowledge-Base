@@ -8,12 +8,13 @@
     <link rel="stylesheet" href="../styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
+   
+        
 </head>
 
 <body>
     <!-- Navbar -->
-    <?php include "./adminnav.php" ?>
+     <?php include "adminnav.php" ?>
 
 
     <!-- Main Content -->
@@ -30,7 +31,7 @@
                     <li class="list-group-item"><a href="#">Internet of Things</a></li>
                     <li class="list-group-item"><a href="#">Robotics</a></li>
                     <li class="list-group-item"><a href="#">UI/UX </a></li>
-
+                    
                     <!-- Add more related topics as needed -->
                 </ul>
             </div>
@@ -60,34 +61,52 @@
                     </form>
                 </div>
 
-                <!-- Questions/Posts -->
-                <div class="col-md-12 questions-feed">
-                    <?php
-                    include "./connection.php";
+                <!-- Questions/Posts --> 
+            <div class="col-md-12 questions-feed">
+            <?php
+            include "connection.php";
+            if (!isset($_SESSION['username'])) {
+                // Redirect to login page if the user is not logged in
+                header("Location: ../Entry/login.php");
+                exit;
+            }
 
-                    // Fetch questions from the database
-                    $sql = "SELECT * FROM ask_tb ORDER BY created_at DESC";
-                    $stmt = $conn->prepare($sql);
-                    $stmt->execute();
-                    $result = $stmt->get_result();
+            // Fetch questions from the database
+            $sql ="SELECT id , view , title, description, category, created_at, username, view, 'ask' AS type, NULL AS image
+                FROM ask_tb
+                UNION
+                SELECT id , view , title, description, category, created_at, username, view, 'post' AS type, image
+                FROM post_tb
+                ORDER BY created_at DESC;
+            ";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->get_result();
 
-                    while ($row = $result->fetch_assoc()) {
-                        $title = $row['title'];
-                        $description = $row['description'];
-                        $created_at = $row['created_at'];
-                        // Assuming a placeholder username and time for now
-                        $username = $row['username'];
-                        $tags = $row['tags'];
+            while ($row = $result->fetch_assoc()) {
+                $title = $row['title'];
+                $description = $row['description'];
+                $created_at = $row['created_at'];
+                // Assuming a placeholder username and time for now
+                $username = $row['username'];
+                $type = $row['type'];
+                $image = $row['image'];
+                $id = $row['id'];
+                $view = $row['view'];
 
-                        echo '
+            
+                echo '
                 <div class="question-card mb-3">
                     <div class="d-flex justify-content-between">
                         <h5 class="card-title">' . $title . '</h5>
-                        <button class="btn btn-sm btn-outline-secondary">Follow</button>
                     </div>
-                    <p class="card-text">' . $description . '</p>
-                    <p class="card-text">' . $tags . '</p>
-
+                    <p class="card-text">' . $description . '</p>';
+            
+                if ($type === 'post' && $image) {
+                    echo '<img src="./postimage/' . $image . '" class="card-img-top" alt="Post image">';
+                }
+            
+                echo '
                     <div class="d-flex justify-content-between">
                         <div>
                             <button class="btn btn-sm btn-link">Answers</button>
@@ -96,19 +115,31 @@
                         </div>
                         <small class="text-muted">Posted by ' . $username . ' - ' . $created_at . '</small>
                     </div>
-                </div>
-                ';
-                    }
+                       <div class="row mb-2">
+                              <div class="col-md-6 col-sm-12">
+                                  <a href=".\admin_post_ques\ques_post_update.php?id=' . $id . '" class="btn btn-info w-100 ">Update</a>
+                              </div>
+                              <div class="col-md-6 col-sm-12"> ';
+                              if($view) {
+                                echo '<a href=".\admin_post_ques\ques_post_delete.php?id=' . $id . '"  class="btn btn-danger w-100 ">HIDE</a>';
+                              }else {
+                                echo '<a href=".\admin_post_ques\ques_post_delete.php?id=' . $id . '"  class="btn btn-success w-100 ">SHOW</a>';
+                              } 
+                                  echo ' 
+                              </div>
+                            </div>
+                        </div>
+                  
+                </div>';
+            }
+            $conn->close();
+            ?>
+    </div>       
+</div>
+</div>
 
-                    $conn->close();
-                    ?>
-                </div>
-            </div>
-        </div>
-    </div>
 
-
-    <?php include "./footer.php"   ?>
+    <?php include "footer.php"   ?>
 
 
 

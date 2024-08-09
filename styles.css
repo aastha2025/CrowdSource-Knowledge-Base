@@ -271,3 +271,40 @@ body {
         font-size: 14px;
    }
 }
+
+.btn-more {
+    margin-top: auto;
+}
+
+.btn-update,
+.btn-delete {
+    margin-bottom: 10px;
+    /* Add space between buttons */
+    border-radius: 5px;
+    padding: 10px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.btn-update {
+    background-color: #28a745;
+    /* Green */
+    border: none;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    /* Red */
+    border: none;
+}
+
+.btn-update:hover {
+    background-color: #218838;
+    /* Darker green */
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+    /* Darker red */
+}

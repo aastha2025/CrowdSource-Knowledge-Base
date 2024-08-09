@@ -60,10 +60,21 @@
 
 
         // Fetch questions from the database
-        $sql = "SELECT * FROM ask_tb WHERE category = ? ORDER BY created_at DESC";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s",$name);
-        $stmt->execute();
+        $sql = "(
+            SELECT title, description, category, created_at, username, 'ask' AS type, NULL AS image
+            FROM ask_tb
+            WHERE category = ?
+        )
+        UNION ALL
+        (
+            SELECT title, description, category, created_at, username, 'post' AS type, image
+            FROM post_tb
+            WHERE category = ?
+        )
+        ORDER BY created_at DESC";
+       $stmt = $conn->prepare($sql);
+       $stmt->bind_param("ss", $name, $name);
+       $stmt->execute();
         $result = $stmt->get_result();
 
         while ($row = $result->fetch_assoc()) {
@@ -72,28 +83,33 @@
             $created_at = $row['created_at'];
             // Assuming a placeholder username and time for now
             $username = $row['username'];
-            $tags = $row['tags'];
+            $type = $row['type'];
+            $image = $row['image'];
 
             echo '
-                <div class="question-card mb-3">
-                    <div class="d-flex justify-content-between">
-                        <h5 class="card-title">' . $title . '</h5>
-                        <button class="btn btn-sm btn-outline-secondary">Follow</button>
-                    </div>
-                    <p class="card-text">' . $description . '</p>
-                    <p class="card-text">' . $tags . '</p>
-
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <button class="btn btn-sm btn-link">Answers</button>
-                            <button class="btn btn-sm btn-link">Upvote</button>
-                            <button class="btn btn-sm btn-link">Share</button>
-                        </div>
-                        <small class="text-muted">Posted by ' . $username . ' - ' . $created_at . '</small>
-                    </div>
+            <div class="question-card mb-3">
+                <div class="d-flex justify-content-between">
+                    <h5 class="card-title">' . $title . '</h5>
+                    <button class="btn btn-sm btn-outline-secondary">Follow</button>
                 </div>
-                ';
+                <p class="card-text">' . $description . '</p>';
+
+        if ($type === 'post' && $image) {
+            echo '<img src="../postimage/' . $image . '" class="card-img-top" alt="Post image">';
         }
+
+        echo '
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <button class="btn btn-sm btn-link">Answers</button>
+                        <button class="btn btn-sm btn-link">Upvote</button>
+                        <button class="btn btn-sm btn-link">Share</button>
+                    </div>
+                    <small class="text-muted">Posted by ' . $username . ' - ' . $created_at . '</small>
+                </div>
+            </div>';
+    }
+
 
         $conn->close();
         ?>

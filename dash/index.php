@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="../styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
+   
+        
 </head>
 
 <body>
@@ -64,9 +65,20 @@
             <div class="col-md-12 questions-feed">
             <?php
             include "../connection.php";
+            if (!isset($_SESSION['username'])) {
+                // Redirect to login page if the user is not logged in
+                header("Location: ../Entry/login.php");
+                exit;
+            }
 
             // Fetch questions from the database
-            $sql = "SELECT * FROM ask_tb ORDER BY created_at DESC";
+            $sql ="SELECT title, description, category, created_at, username, view, 'ask' AS type, NULL AS image
+                FROM ask_tb
+                UNION
+                SELECT title, description, category, created_at, username, view, 'post' AS type, image
+                FROM post_tb
+                ORDER BY created_at DESC;
+            ";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -77,15 +89,23 @@
                 $created_at = $row['created_at'];
                 // Assuming a placeholder username and time for now
                 $username = $row['username'];
+                $type = $row['type'];
+                $image = $row['image'];
+                $view = $row['view'];
+                if($view){
             
                 echo '
                 <div class="question-card mb-3">
                     <div class="d-flex justify-content-between">
                         <h5 class="card-title">' . $title . '</h5>
-                        <button class="btn btn-sm btn-outline-secondary">Follow</button>
                     </div>
-                    <p class="card-text">' . $description . '</p>
-
+                    <p class="card-text">' . $description . '</p>';
+            
+                if ($type === 'post' && $image) {
+                    echo '<img src="../postimage/' . $image . '" class="card-img-top" alt="Post image">';
+                }
+            
+                echo '
                     <div class="d-flex justify-content-between">
                         <div>
                             <button class="btn btn-sm btn-link">Answers</button>
@@ -94,13 +114,11 @@
                         </div>
                         <small class="text-muted">Posted by ' . $username . ' - ' . $created_at . '</small>
                     </div>
-                </div>
-                ';
+                </div>';
             }
-
+        }
             $conn->close();
             ?>
-        </div>
     </div>       
 </div>
 </div>

@@ -1,45 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>post page </title>
-    <link rel="stylesheet" href="./post.css">
+    <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background: #fff;
-            padding: 40px;
+        .container1 {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 600px;
         }
-        .container h1 {
+
+        .container1 h1 {
+            font-size: 28px;
             margin-bottom: 20px;
-            font-size: 24px;
-            color: #333;
+            text-align: center;
         }
-        .container label {
+
+        .container1 form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container1 label {
             display: block;
             margin-bottom: 8px;
-            font-weight: bold;
         }
-        .container input,
-        .container textarea,
-        .container select,
-        .container button {
+
+        .container1 input[type="text"],
+        .container1 textarea,
+        .container1 select,
+        .container1 input[type="file"] {
             width: 100%;
             padding: 10px;
             margin-bottom: 20px;
@@ -47,75 +44,244 @@
             border-radius: 5px;
             font-size: 16px;
         }
-        .container textarea {
+
+        .container1 textarea {
             resize: vertical;
             min-height: 100px;
-            max-height: 300px;
         }
-        .container button {
+
+        .container1 button {
             background-color: #007bff;
             color: white;
             border: none;
+            padding: 10px;
+            border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
             transition: background-color 0.3s;
+            width: 100%;
         }
-        .container button:hover {
+
+        .container1 button:hover {
             background-color: #0056b3;
         }
+
+        .file-preview img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .scrollable-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .tag-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            background-color: #f1f1f1;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .tag-item button {
+            background: none;
+            border: none;
+            color: #d9534f;
+            font-size: 18px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .tag-item button:hover {
+            color: #c9302c;
+        }
     </style>
-
-
 </head>
+
 <body>
+    <?php include "nav.php"; ?>
 
- <!-- Navbar -->
- <?php include "./nav.php" ?>
+    <?php
+    ob_start();
+   
+    if (!isset($_SESSION['username'])) {
+        echo '<script>window.open("../Entry/login.php", "_self");</script>';
+        exit;
+    }
 
-<div class="container">
-        <h1>Post a Meme</h1>
-        <form id="postForm" method="post" action="submit_post.php" enctype="multipart/form-data">
-            <label for="title">Title:</label>
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        include "../connection.php";
+
+        $title = $_POST['title'] ?? '';
+        $description = $_POST['description'] ?? '';
+        $category = $_POST['category'] ?? '';
+        $addimage = $_FILES['image'] ?? '';
+
+        $errors = [];
+        $createdAt = date('Y-m-d H:i:s');
+        $username = $_SESSION['username'];
+
+        if (empty($title) || empty($description) || empty($category) || empty($addimage['name'])) {
+            $errors[] = '<div class="alert alert-danger alert-dismissible fade show m-4" role="alert">
+                <strong>ALERT!</strong> One or more fields must not be empty...
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
+        }
+
+        if (empty($errors)) {
+            $checkSql = "SELECT * FROM post_tb WHERE title = ?";
+            $checkStmt = $conn->prepare($checkSql);
+            $checkStmt->bind_param("s", $title);
+            $checkStmt->execute();
+            $result = $checkStmt->get_result();
+
+            if ($result->num_rows > 0) {
+                echo '<div class="alert alert-warning alert-dismissible fade show m-4" role="alert">
+                    <strong>ALERT!</strong> Post already exists...
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>';
+            } else {
+                $file = "../postimage/" . basename($addimage['name']);
+                $upload = 1;
+                $fileType = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+
+                $check = getimagesize($addimage['tmp_name']);
+                if ($check === false) {
+                    $upload = 0;
+                    $errors[] = '<div class="alert alert-danger alert-dismissible fade show m-4" role="alert">
+                        <strong>ERROR!</strong> File is not an image.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>';
+                }
+    
+
+                if ($upload && move_uploaded_file($addimage['tmp_name'], $file)) {
+                    $sql = "INSERT INTO post_tb (title, description, category, created_at, username, image) VALUES (?, ?, ?, ?, ?, ?)";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param("ssssss", $title, $description, $category, $createdAt, $username, $addimage['name']);
+                    if ($stmt->execute()) {
+                        echo '<div class="alert alert-success alert-dismissible fade show m-4" role="alert">
+                            <strong>Congrats!</strong> Post submitted successfully...
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>';
+                        ob_end_clean();
+                        echo "<script>window.open('index.php', '_self');</script>";
+                        exit();
+                    } else {
+                        $errors[] = '<div class="alert alert-danger alert-dismissible fade show m-4" role="alert">
+                            <strong>ERROR!</strong> Error adding post. Please try again.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>';
+                    }
+                } else {
+                    echo '<div class="alert alert-danger alert-dismissible fade show m-4" role="alert">
+                        <strong>ERROR!</strong> Something went wrong...
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>';
+                }
+            }
+        }
+
+        foreach ($errors as $error) {
+            echo $error;
+        }
+    }
+    ?>
+    
+    <div class="container1">
+        <h1 class="text-center"><span style="color: #06759A;">Create Post</span></h1>
+        <form id="postForm" method="post" action="" enctype="multipart/form-data">
+            <label for="title">Post Title:</label>
             <input type="text" id="title" name="title" required>
 
             <label for="description">Description:</label>
             <textarea id="description" name="description" required></textarea>
 
+            <?php
+            include "../connection.php";
+            $sql1 = "SELECT * FROM category";
+            $stmt1 = $conn->prepare($sql1);
+            $stmt1->execute();
+            $result = $stmt1->get_result();
+            ?>
             <label for="category">Category:</label>
-            <select id="category" name="category" required></select>
-
-            <label for="tags">Tags:</label>
-            <input type="text" id="tags" name="tags" placeholder="Comma-separated tags">
-
-            <label for="image">Upload Image:</label>
-            <input type="file" id="image" name="image" accept="image/*">
-
-            <button type="submit">Post</button>
+            <select id="category" name="category">
+                <option value="">Select a Category</option>
+                <?php
+                    while($row = $result->fetch_assoc()) {
+                        echo '<option value="'.$row['name'].'">'.$row['name'].'</option>';
+                    }
+                ?>
+            </select> 
+            <div class="form-group">
+                <label for="image">Post Image:</label>
+                <input type="file" id="image" name="image" class="form-control" accept="image/*" >
+                <div id="imagePreview" class="file-preview"></div>
+            </div>
+            
+            <button type="submit">Submit Post</button>
         </form>
     </div>
 
+    <?php include "footer.php" ?>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            fetchCategories();
-        });
+            const selectedTags = document.getElementById('selectedTags');
+            const checkboxes = document.querySelectorAll('.scrollable-list .form-check-input');
 
-        async function fetchCategories() {
-            const response = await fetch('fetch_categories.php');
-            const categories = await response.json();
-            const categorySelect = document.getElementById('category');
-            categories.forEach(category => {
-                const option = document.createElement('option');
-                option.value = category.id;
-                option.textContent = category.name;
-                categorySelect.appendChild(option);
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    const tag = checkbox.nextElementSibling.textContent.trim();
+                    if (checkbox.checked) {
+                        // Add the tag to the selectedTags container
+                        const tagItem = document.createElement('div');
+                        tagItem.className = 'tag-item';
+                        tagItem.textContent = tag;
+                        const removeButton = document.createElement('button');
+                        removeButton.innerHTML = '&times;';
+                        removeButton.addEventListener('click', () => {
+                            checkbox.checked = false;
+                            tagItem.remove();
+                        });
+                        tagItem.appendChild(removeButton);
+                        selectedTags.appendChild(tagItem);
+                    } else {
+                        // Remove the tag from the selectedTags container
+                        Array.from(selectedTags.children).forEach(tagItem => {
+                            if (tagItem.textContent.trim().startsWith(tag)) {
+                                tagItem.remove();
+                            }
+                        });
+                    }
+                });
             });
-        }
+        });
+        document.getElementById('image').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = ''; // Clear previous previews
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = 'Image Preview';
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
     </script>
-
-    
-<!-- footer  -->
-<?php include "./footer.php" ?>
-
-
 </body>
 
 </html>

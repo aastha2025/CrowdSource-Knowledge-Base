@@ -7,8 +7,9 @@
     <link rel="stylesheet" href="contact.css">
 </head>
 <body>
+   
      <!-- Navbar -->
-     <?php include "./nav.php" ?>
+     <?php include "nav.php" ?>
 
 <div class="contact-container">
         <div class="contact-description">
@@ -19,7 +20,7 @@
         </div>
         <div class="contact-form">
             <h2>Send us a Message</h2>
-            <form id="contactForm" method="post" action="send_message.php">
+            <form id="contactForm" method="post" action="contact.php">
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="name" required>
 
@@ -36,7 +37,7 @@
 
 
     <!-- footer  -->
-<?php include "./footer.php" ?>
+<?php include "footer.php" ?>
 
 </body>
 </html>

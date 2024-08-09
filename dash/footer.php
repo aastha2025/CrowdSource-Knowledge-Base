@@ -3,35 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Footer Example</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../home page/styles.css">
-    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style1.css">
+    <title>Document</title>
 </head>
 <body>
-    <!-- Footer -->
-    <footer class="footer">
+    
+<footer class="footer">
         <div class="container">
             <div class="row justify-content-between">
                 <!-- First Section -->
-                <div class="col-md-3 footer-section">
-                    <h4>CKnowledge <span class="mylogo" >Base</span> </h4>
-                    <!-- <p>&copy; 2024 CrowdSource Knowledge Base. All rights reserved.</p> -->
-                    <p>Created by <span class="mylogo" >Aastha Singh</span> </p>
+                <div class="col-md-4 footer-section">
+                    <h4>CKnowledge <span class="mylogo">Base</span></h4>
+                    <p>Created by <span class="mylogo">Aastha Singh</span></p>
                 </div>
                 <!-- Second Section -->
-                <div class="col-md-3 footer-section">
+                <div class="col-md-4 footer-section">
                     <h5>Follow Us</h5>
-                    <ul class="list-unstyled text-center">
+                    <ul class="list-unstyled">
                         <li><a href="https://www.instagram.com">Instagram</a></li>
                         <li><a href="https://www.twitter.com">Twitter</a></li>
                         <li><a href="https://www.facebook.com">Facebook</a></li>
                     </ul>
                 </div>
                 <!-- Third Section -->
-                <div class="col-md-3 footer-section">
+                <div class="col-md-4 footer-section">
                     <h5>Know More</h5>
-                    <ul class="list-unstyled text-center">
+                    <ul class="list-unstyled">
                         <li><a href="./about.php">About</a></li>
                         <li><a href="./career.php">Career</a></li>
                         <li><a href="./contact.php">Contact</a></li>
@@ -40,10 +39,5 @@
             </div>
         </div>
     </footer>
-        <!-- Include Bootstrap's JavaScript and jQuery -->
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 </body>
 </html>

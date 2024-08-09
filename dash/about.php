@@ -7,7 +7,7 @@
 </head>
 <body>
      <!-- Navbar -->
-     <?php include "./nav.php" ?>
+     <?php include "nav.php" ?>
 
 
 
@@ -20,7 +20,7 @@
 
 
  <!-- footer  -->
-<?php include "./footer.php" ?>
+<?php include "footer.php" ?>
 
 
 </body>

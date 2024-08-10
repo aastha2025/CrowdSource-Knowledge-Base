@@ -106,7 +106,7 @@
 </head>
 
 <body>
-    <?php include "nav.php" ?>
+    <?php include "../adminnav.php" ?>
 
     
 <?php
@@ -209,7 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </form>
     </div>
 
-    <?php include "footer.php" ?>
+    <?php include "../footer.php" ?>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {

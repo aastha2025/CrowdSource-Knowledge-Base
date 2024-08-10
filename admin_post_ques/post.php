@@ -107,7 +107,7 @@
 </head>
 
 <body>
-    <?php include "nav.php"; ?>
+    <?php include "../adminnav.php"; ?>
 
     <?php
     ob_start();
@@ -229,7 +229,7 @@
         </form>
     </div>
 
-    <?php include "footer.php" ?>
+    <?php include "../footer.php" ?>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {

@@ -96,11 +96,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Insert new user into the database
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT); // Hash the password
             $role = 'user'; // Default role for new registrations
-            $createdAt = date('Y-m-d H:i:s'); // Current date and time
+            $created_at = date('Y-m-d H:i:s'); // Current date and time
 
             $sql = "INSERT INTO crowdsource (name, email, password, role, created_at) VALUES (?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssss", $name, $email, $hashedPassword, $role, $createdAt);
+            $stmt->bind_param("sssss", $name, $email, $hashedPassword, $role, $created_at);
 
             if ($stmt->execute()) {
                 // Registration successful, redirect to dashboard

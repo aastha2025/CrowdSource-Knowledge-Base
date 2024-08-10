@@ -43,18 +43,25 @@
                     <h5>Every voice contributes to a richer, collective understanding !!</h5>
                     <form action="submit_question.php" method="POST">
                         <div class="form-group">
-                            <textarea class="form-control" name="question" rows="3" placeholder="What you want to share?"></textarea>
+                            <p class="form-control" name="question" >What you want to share?</p>
                         </div>
                         <div class="container mt-3">
                             <div class="row">
                                 <div class="col-md-6 mb-2">
                                     <a href="ask.php" class="btn btn-custom-ask btn-block">Ask</a>
                                 </div>
-                                <!-- <div class="col-md-4 mb-2">
-                                    <a href="answer.php" class="btn btn-custom-answer btn-block">Answer</a>
-                                </div> -->
                                 <div class="col-md-6 mb-2">
                                     <a href="post.php" class="btn btn-custom-post btn-block">Post</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container mt-3">
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                <button type="button" class="btn btn-primary" id="questionsButton">Questions for You</button>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                <button type="button" class="btn btn-secondary" id="postsButton">Posts for You</button>
                                 </div>
                             </div>
                         </div>
@@ -63,62 +70,9 @@
 
                 <!-- Questions/Posts --> 
             <div class="col-md-12 questions-feed">
-            <?php
-            include "../connection.php";
-            if (!isset($_SESSION['username'])) {
-                // Redirect to login page if the user is not logged in
-                header("Location: ../Entry/login.php");
-                exit;
-            }
-
-            // Fetch questions from the database
-            $sql ="SELECT title, description, category, created_at, username, view, 'ask' AS type, NULL AS image
-                FROM ask_tb
-                UNION
-                SELECT title, description, category, created_at, username, view, 'post' AS type, image
-                FROM post_tb
-                ORDER BY created_at DESC;
-            ";
-            $stmt = $conn->prepare($sql);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            while ($row = $result->fetch_assoc()) {
-                $title = $row['title'];
-                $description = $row['description'];
-                $created_at = $row['created_at'];
-                // Assuming a placeholder username and time for now
-                $username = $row['username'];
-                $type = $row['type'];
-                $image = $row['image'];
-                $view = $row['view'];
-                if($view){
-            
-                echo '
-                <div class="question-card mb-3">
-                    <div class="d-flex justify-content-between">
-                        <h5 class="card-title">' . $title . '</h5>
-                    </div>
-                    <p class="card-text">' . $description . '</p>';
-            
-                if ($type === 'post' && $image) {
-                    echo '<img src="../postimage/' . $image . '" class="card-img-top" alt="Post image">';
-                }
-            
-                echo '
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <button class="btn btn-sm btn-link">Answers</button>
-                            <button class="btn btn-sm btn-link">Upvote</button>
-                            <button class="btn btn-sm btn-link">Share</button>
-                        </div>
-                        <small class="text-muted">Posted by ' . $username . ' - ' . $created_at . '</small>
-                    </div>
-                </div>';
-            }
-        }
-            $conn->close();
-            ?>
+        <div id="content">
+            <!-- Dynamic content will be loaded here -->
+        </div>
     </div>       
 </div>
 </div>
@@ -129,5 +83,20 @@
 
 
 </body>
+<script>
+
+document.getElementById('questionsButton').addEventListener('click', function () {
+            fetch('fetch_data.php?type=ask')
+                .then(response => response.text())
+                .then(data => document.getElementById('content').innerHTML = data);
+        });
+
+        document.getElementById('postsButton').addEventListener('click', function () {
+            fetch('fetch_data.php?type=post')
+                .then(response => response.text())
+                .then(data => document.getElementById('content').innerHTML = data);
+        });
+
+</script>
 
 </html>

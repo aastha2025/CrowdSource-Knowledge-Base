@@ -102,7 +102,7 @@
         echo '
                 <div class="d-flex justify-content-between">
                     <div>
-                        <button class="btn btn-sm btn-link">Answers</button>
+                            <button class="btn btn-sm btn-link"><a href="answer.php">Answers</a></button>
                         <button class="btn btn-sm btn-link">Upvote</button>
                         <button class="btn btn-sm btn-link">Share</button>
                     </div>

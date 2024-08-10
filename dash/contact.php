@@ -10,6 +10,35 @@
    
      <!-- Navbar -->
      <?php include "nav.php" ?>
+     <?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    include "../connection.php"; // Ensure this path is correct
+
+    // Sanitize and validate inputs
+    $name = $_POST['name'];
+    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+    $message = $_POST['message'];
+
+    if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+        echo '<p class="error">Invalid email format.</p>';
+        exit;
+    }
+
+    // Prepare and execute SQL statement to insert message
+    $sql = "INSERT INTO contact_us (name, email, message) VALUES (?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sss", $name, $email, $message);
+
+    if ($stmt->execute()) {
+        // Notify the admin (this could be an email notification, or inserting into an admin notifications table)
+        // Here, we'll just display a success message
+        echo '<p class="success">Message sent successfully. We will get back to you soon.</p>';
+    } else {
+        echo '<p class="error">Failed to send message. Please try again later.</p>';
+    }
+}
+?>
+
 
 <div class="contact-container">
         <div class="contact-description">
@@ -37,7 +66,7 @@
 
 
     <!-- footer  -->
-<?php include "footer.php" ?>
+<?php include "../footer.php" ?>
 
 </body>
 </html>

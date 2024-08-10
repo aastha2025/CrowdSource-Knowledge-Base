@@ -28,13 +28,13 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item mx-2">
-                    <a class="nav-link" href="admin.php">Manage Home</a>
+                    <a class="nav-link" href="admin.php">Manage QUESTION/POST/HOME</a>
                 </li>
-                <li class="nav-item mx-2">
+                <!-- <li class="nav-item mx-2">
                     <a class="nav-link" href="adminques.php">Manage Q/A</a>
-                </li>
+                </li> -->
                 <li class="nav-item mx-2">
-                    <a class="nav-link disabled" aria-disabled="true">Manage Notification</a>
+                    <a class="nav-link" href="./admin_notifications.php">Manage Notifications</a>
                 </li>
                 <li class="nav-item mx-2">
                     <a class="nav-link" href="./admin_manage_category.php">Manage Category</a>

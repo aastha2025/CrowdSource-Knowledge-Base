@@ -2,10 +2,10 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "crowdsource_db"; // Change to your actual database name
+$dbname = "crowdsource_database"; // Change to your actual database name
 
 // Create connection
-$conn = mysqli_connect($servername, $username, $password, $dbname);
+$conn = mysqli_connect($servername, $username, $password, $dbname , 3307);
 
 // Check connection
 if ($conn->connect_error) {

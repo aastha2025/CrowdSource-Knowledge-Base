@@ -67,7 +67,10 @@
                     echo '<a href="update_post.php?id=' . $row['id'] . '&type=post" class="btn btn-warning">Update</a>';
                     if($row['view'] ===1) {
                         echo '<a href="delete.php?id=' . $row['id'] . '&type=post"  class="btn btn-danger  ">HIDE</a>';
-                      }               }
+                      }         
+                    
+                    
+                    }
                 echo '
                     <div class="d-flex justify-content-between">
                         <div>

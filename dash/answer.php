@@ -1,57 +1,17 @@
 <?php
 include "../connection.php";
 session_start();
+
 if (!isset($_SESSION['username'])) {
-    // Redirect to login page if the user is not logged in
-    header("Location: ../Entry/login.php");
-    exit;
+    die("You must be logged in to view this page.");
 }
 
-if (!isset($_GET['id'])) {
-    die("Missing question ID");
-}
+$username = $_SESSION['username'];
 
-$ques_id = $_GET['id'];
-$user_id = $_SESSION['user_id']; // Assuming user ID is stored in the session
-
-// Fetch the question details
-$sql = "SELECT * FROM ask_tb WHERE id = ?";
+$sql = "SELECT * FROM ask_tb WHERE view = 1 ORDER BY created_at DESC";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $ques_id);
 $stmt->execute();
-$question = $stmt->get_result()->fetch_assoc();
-
-// Fetch answers for the question
-$sql = "
-    SELECT a.*, u.username 
-    FROM ans_tb a 
-    JOIN crowdsource u ON a.user_id = u.id 
-    WHERE a.ques_id = ? 
-    ORDER BY a.created_at DESC
-";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $ques_id);
-$stmt->execute();
-$answers = $stmt->get_result();
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (!empty($_POST['answer'])) {
-        $answer = $_POST['answer'];
-
-        // Insert the answer into the database
-        $sql = "INSERT INTO ans_tb (ques_id, user_id, answer) VALUES (?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("iis", $ques_id, $user_id, $answer);
-
-        if ($stmt->execute()) {
-            header("Location: ans.php?id=$ques_id");
-        } else {
-            echo "ERROR: " . $stmt->error;
-        }
-    } else {
-        echo "Answer cannot be empty.";
-    }
-}
+$result = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -59,77 +19,54 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Answers</title>
-    <link rel="stylesheet" href="../styles.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Questions - CrowdSource</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./style.css">
     <style>
-        body {
-            background-color: #f8f9fa;
+        .question-card {
+            border: 1px solid #dee2e6;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
-        .container {
-            margin-top: 30px;
+        .question-card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transform: translateY(-5px);
         }
-        .question {
-            margin-bottom: 30px;
+        .question-card .card-title {
+            color: #007bff;
+            font-size: 1.25rem;
         }
-        .answer-form textarea {
-            width: 100%;
-            margin-bottom: 20px;
+        .question-card .card-text {
+            font-size: 1rem;
+            color: #495057;
         }
-        .answer {
-            background-color: #ffffff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-            margin-bottom: 10px;
-        }
-        .answer-author {
-            font-weight: bold;
-        }
-        .answer-actions {
-            margin-top: 10px;
-        }
-        .answer-actions button {
-            margin-right: 5px;
+        .question-card .text-muted {
+            font-size: 0.875rem;
         }
     </style>
 </head>
 <body>
-<?php include "../navbar.php"; ?>
+    <?php include "nav.php"; ?>
 
-<div class="container">
-    <div class="question">
-        <h2><?php echo $question['title']; ?></h2>
-        <p><?php echo $question['description']; ?></p>
-    </div>
+    <div class="container my-5">
+        <h1 class="mb-4">Latest Questions</h1>
 
-    <div class="answer-form">
-        <h3>Answer this question</h3>
-        <form action="ans.php?id=<?php echo $ques_id; ?>" method="post">
-            <textarea name="answer" rows="5" placeholder="Type your answer here..." required></textarea>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-    </div>
-
-    <div class="answers">
-        <h3>Answers</h3>
-        <?php while ($answer = $answers->fetch_assoc()): ?>
-            <div class="answer">
-                <div class="answer-author"><?php echo $answer['username']; ?> (<?php echo $answer['created_at']; ?>)</div>
-                <p><?php echo $answer['answer']; ?></p>
-                <?php if ($answer['user_id'] == $user_id): ?>
-                    <div class="answer-actions">
-                        <a href="edit_answer.php?id=<?php echo $answer['id']; ?>" class="btn btn-secondary">Edit</a>
-                        <a href="delete_answer.php?id=<?php echo $answer['id']; ?>" class="btn btn-danger">Delete</a>
+        <?php if ($result->num_rows > 0){
+            while($row = $result->fetch_assoc()) {
+                echo '
+                <div class="question-card mb-3">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">' . $row['title'] . '</h5>
                     </div>
-                <?php endif; ?>
-            </div>
-        <?php endwhile; ?>
-    </div>
-</div>
+                    <p class="card-text">' . $row['description'] . '</p>';
+                    echo'
+                    <small class="text-muted">Posted by ' . $row['username'] . ' - ' . $row['created_at'] . '</small>';
+             
+        }
+    }
 
-<?php include "../footer.php"; ?>
-
+?>
 </body>
 </html>

@@ -25,19 +25,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Prepare and execute SQL statement to insert message
-    $sql = "INSERT INTO contact_us (name, email, message) VALUES (?, ?, ?)";
+    $sql = "INSERT INTO contact_us (name, email, message, status) VALUES (?, ?, ?, 'unread')";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("sss", $name, $email, $message);
 
     if ($stmt->execute()) {
-        // Notify the admin (this could be an email notification, or inserting into an admin notifications table)
-        // Here, we'll just display a success message
         echo '<p class="success">Message sent successfully. We will get back to you soon.</p>';
     } else {
         echo '<p class="error">Failed to send message. Please try again later.</p>';
     }
 }
 ?>
+
 
 
 <div class="contact-container">

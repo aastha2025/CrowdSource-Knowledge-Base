@@ -33,16 +33,22 @@
                 <!-- <li class="nav-item mx-2">
                     <a class="nav-link" href="adminques.php">Manage Q/A</a>
                 </li> -->
-                <li class="nav-item mx-2">
-                    <a class="nav-link" href="./admin_notifications.php">Manage Notifications</a>
-                </li>
-                <li class="nav-item mx-2">
-                    <a class="nav-link" href="./admin_manage_category.php">Manage Category</a>
-                </li>
-                
-                <li class="nav-item mx-2">
-                    <a class="nav-link" href="adminprofile.php">Profile</a>
-                </li>
+
+                <?php
+                    include "connection.php";
+
+                    // Fetch unread messages count
+                    $sql = "SELECT COUNT(*) as unread_count FROM contact_us WHERE status = 'unread'";
+                    $result = $conn->query($sql);
+                    $row = $result->fetch_assoc();
+                    $unread_count = $row['unread_count'];
+                    ?>
+
+                        <li class="nav-item mx-2">
+                        <a class="nav-link" href="admin_notifications.php">Manage Notifications (<?php echo $unread_count; ?>)</a>
+                        </li>
+        
+            
                 <li class="nav-item mx-2">
                     <form class="d-flex">
                         <input class="form-control me-2" type="search" placeholder="Search Knowledge" aria-label="Search">

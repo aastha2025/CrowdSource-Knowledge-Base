@@ -60,10 +60,10 @@
                     <p class="card-text">' . $row['description'] . '</p>';
             
                 if ($row['image']) {
-                    echo '<img src="./postimage/' . $row['image'] . '" class="card-img-top" alt="Post image">';
+                    echo '<img src="./postimage/' . $row['image'] . '" class="card-img-top" alt="Post image" style="width:500px" >';
                 }
-              
-                    echo '<a href="./admin_post_ques/post_update.php?id=' . $row['id'] . '&type=post" class="btn btn-warning">Update</a>';
+                  
+                    echo '<br><a href="./admin_post_ques/post_update.php?id=' . $row['id'] . '&type=post" class="btn btn-warning">Update</a>';
                     if($row['view'] ===1) {
                         echo '<a href="./admin_post_ques/delete.php?id=' . $row['id'] . '&type=post"  class="btn btn-danger  ">HIDE</a>';
                       }else {
@@ -72,7 +72,7 @@
                 echo '
                     <div class="d-flex justify-content-between">
                         <div>
-                            <button class="btn btn-sm btn-link">Answers</button>
+                            <button class="btn btn-sm btn-link">Comment</button>
                             <button class="btn btn-sm btn-link">Upvote</button>
                             <button class="btn btn-sm btn-link">Share</button>
                         </div>

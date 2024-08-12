@@ -9,6 +9,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <style>
+        body{
+            background: url('background_image.avif') no-repeat;
+
+        }
         .contain {
             max-width: 600px;
             margin: 20px auto;
@@ -110,7 +114,6 @@
 
     
 <?php
-ob_start();
 if (!isset($_SESSION['username'])) {
     // Redirect to login page if the user is not logged in
     header("Location: ../Entry/login.php");
@@ -150,9 +153,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             ';
         } else {
-            $sql = "INSERT INTO ask_tb (title, description, category, created_at, username ) VALUES (?, ?, ?, ?, ? )";
+            $sql = "INSERT INTO ask_tb (title, description, category, username ) VALUES (?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssss", $title, $description, $category, $createdAt, $username);
+            $stmt->bind_param("ssss", $title, $description, $category, $username);
             if ($stmt->execute()) {
                 echo '
                 <div class="alert alert-success alert-dismissible fade show m-4" role="alert">
@@ -160,13 +163,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 ';
-                ob_end_clean();
                 echo "<script>window.open('index.php', '_self');</script>";
                 exit();
             } else {
                 echo '
                 <div class="alert alert-danger alert-dismissible fade show m-4" role="alert">
-                    <strong>ERROR!</strong> Something went wrong...
+                        <strong>ERROR!</strong> Something went wrong: '.$stmt->error . '
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 ';

@@ -24,14 +24,14 @@
                 if ($row['username'] === $username) {
                     echo '<a href="update.php?id=' . $row['id'] . '&type=ask" class="btn btn-warning">Update</a>';
                     if($row['view'] === 1) {
-                        echo '<a href="delete.php?id=' . $row['id'] . '&type=ask"  class="btn btn-danger  ">HIDE</a>';
+                        echo '<a href="delete.php?id=' . $row['id'] . '&type=ask"  class="btn btn-danger  ">Delete</a>';
                       }            
                     
                     }
             echo '
                 <div class="d-flex justify-content-between">
                     <div>
-                            <button class="btn btn-sm btn-link"><a href="answer.php">Answers</a></button>
+                            <button class="btn btn-sm btn-link"><a  href="answer.php?id=' . $row['id'] . '&type=ask" >Answers</a></button>
                         <button class="btn btn-sm btn-link">Upvote</button>
                         <button class="btn btn-sm btn-link">Share</button>
                     </div>
@@ -61,12 +61,12 @@
                     <p class="card-text">' . $row['description'] . '</p>';
             
                 if ($row['image']) {
-                    echo '<img src="../postimage/' . $row['image'] . '" class="card-img-top" alt="Post image">';
+                    echo '<img src="../postimage/' . $row['image'] . '" class="card-img-top" alt="Post image" style="width:500px" >';
                 }
                 if ($row['username'] === $username) {
-                    echo '<a href="update_post.php?id=' . $row['id'] . '&type=post" class="btn btn-warning">Update</a>';
+                    echo '<br><a href="update_post.php?id=' . $row['id'] . '&type=post" class="btn btn-warning">Update</a>';
                     if($row['view'] ===1) {
-                        echo '<a href="delete.php?id=' . $row['id'] . '&type=post"  class="btn btn-danger  ">HIDE</a>';
+                        echo '<a href="delete.php?id=' . $row['id'] . '&type=post"  class="btn btn-danger">Delete</a>';
                       }         
                     
                     
@@ -74,7 +74,7 @@
                 echo '
                     <div class="d-flex justify-content-between">
                         <div>
-                            <button class="btn btn-sm btn-link"><a href="answer.php">Answers</a></button>
+                            <button class="btn btn-sm btn-link"><a href="answer.php">Comment</a></button>
                             <button class="btn btn-sm btn-link">Upvote</button>
                             <button class="btn btn-sm btn-link">Share</button>
                         </div>

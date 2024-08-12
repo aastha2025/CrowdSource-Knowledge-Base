@@ -224,7 +224,7 @@
                 <input type="file" id="image" name="image" class="form-control" accept="image/*" >
                 <div id="imagePreview" class="file-preview"></div>
             </div>
-            
+
             <button type="submit">Submit Post</button>
         </form>
     </div>

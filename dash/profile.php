@@ -1,28 +1,4 @@
-<?php
-session_start();
-include "../connection.php";
 
-// Check if the user is logged in
-if (!isset($_SESSION['username'])) {
-    header("Location: ../Entry/login.php");
-    exit();
-}
-
-// Fetch user data
-$username = $_SESSION['username'];
-$sql = "SELECT * FROM crowdsource WHERE name = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $username);
-$stmt->execute();
-$result = $stmt->get_result();
-$user_profile = $result->fetch_assoc();
-
-if (!$user_profile) {
-    echo "User profile not found.";
-    exit();
-}
-
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -65,7 +41,31 @@ if (!$user_profile) {
 </head>
 <body>
     <?php include "nav.php"; ?>
+    <?php
+// session_start();
+include "../connection.php";
 
+// Check if the user is logged in
+// if (!isset($_SESSION['username'])) {
+//     header("Location: ../Entry/login.php");
+//     exit();
+// }
+
+// Fetch user data
+$username = $_SESSION['username'];
+$sql = "SELECT * FROM crowdsource WHERE name = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$result = $stmt->get_result();
+$user_profile = $result->fetch_assoc();
+
+if (!$user_profile) {
+    echo "User profile not found.";
+    exit();
+}
+
+?>
     <div class="container my-5">
         <h1 class="text-center">Profile</h1>
         <div class="profile-header">

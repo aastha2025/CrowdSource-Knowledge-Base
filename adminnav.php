@@ -47,8 +47,13 @@
                         <li class="nav-item mx-2">
                         <a class="nav-link" href="admin_notifications.php">Manage Notifications (<?php echo $unread_count; ?>)</a>
                         </li>
-        
-            
+                <li class="nav-item mx-2">
+                    <a class="nav-link" href="./admin_manage_category.php">Manage Category</a>
+                </li>
+                
+                <!-- <li class="nav-item mx-2">
+                    <a class="nav-link" href="adminprofile.php">Profile</a>
+                </li> -->
                 <li class="nav-item mx-2">
                     <form class="d-flex">
                         <input class="form-control me-2" type="search" placeholder="Search Knowledge" aria-label="Search">

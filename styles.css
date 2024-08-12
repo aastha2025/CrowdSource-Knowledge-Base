@@ -158,7 +158,8 @@ body {
     background-color:  #ebf3f5;
     padding: 20px 0;
     color: #343a40;
-    border-top: 3px solid #efeff5; /* Light blue line above the footer */
+    border-top: 3px solid #efeff5; 
+    bottom: px;
 }
 
 .footer a {

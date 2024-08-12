@@ -38,7 +38,6 @@
         }
         #scroll-left {
             left: 10px;
-            position: 290px;
         }
         #scroll-right {
             right: 10px;
@@ -48,13 +47,11 @@
 
 <body>
     <!-- Navbar -->
-    <?php include "./nav.php" ?>
-
+    <?php include "./nav.php"; ?>
 
     <!-- Main Content -->
     <div class="container mt-4">
         <div class="row">
-            <!-- Categories -->
             <!-- Categories -->
             <div class="col-md-4 sidebar">
                 <h4 class="ml-2">Questions</h4>
@@ -64,8 +61,8 @@
                 </ul>
             </div>
 
-                <!-- Questions/Posts -->
-                <div class="col-md-8 questions-feed">
+            <!-- Questions/Posts -->
+            <div class="col-md-8 questions-feed">
             <?php
             include "../connection.php";
             if (!isset($_SESSION['username'])) {
@@ -74,11 +71,11 @@
                 exit;
             }
 
-            // Fetch questions from the database
-            $sql ="SELECT title, description, category, created_at, username, view, 'ask' AS type, NULL AS image
+            // Fetch questions and posts from the database
+            $sql ="SELECT id, title, description, category, created_at, username, view, 'ask' AS type, NULL AS image
                 FROM ask_tb
                 UNION
-                SELECT title, description, category, created_at, username, view, 'post' AS type, image
+                SELECT id, title, description, category, created_at, username, view, 'post' AS type, image
                 FROM post_tb
                 ORDER BY created_at DESC;
             ";
@@ -87,105 +84,105 @@
             $result = $stmt->get_result();
 
             while ($row = $result->fetch_assoc()) {
+                $id = $row['id'];
                 $title = $row['title'];
                 $description = $row['description'];
                 $created_at = $row['created_at'];
-                // Assuming a placeholder username and time for now
                 $username = $row['username'];
                 $type = $row['type'];
                 $image = $row['image'];
-                 $view = $row['view'];
-                 if($view){
-                echo '
-                <div class="question-card mb-3">
-                    <div class="d-flex justify-content-between">
-                        <h5 class="card-title">' . $title . '</h5>
-                    </div>
-                    <p class="card-text">' . $description . '</p>';
-            
-                if ($type === 'post' && $image) {
-                    echo '<img src="../postimage/' . $image . '" class="card-img-top" alt="Post image">';
-                }
-            
-                echo '
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <button class="btn btn-sm btn-link"><a href="answer.php">Answers</a></button>
-                            <button class="btn btn-sm btn-link">Upvote</button>
-                            <button class="btn btn-sm btn-link">Share</button>
+                $view = $row['view'];
+                if ($view) {
+                    echo '
+                    <div class="question-card mb-3">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">' . $title . '</h5>
                         </div>
-                        <small class="text-muted">Posted by ' . $username . ' - ' . $created_at . '</small>
-                    </div>
-                </div>';
+                        <p class="card-text">' . $description . '</p>';
+                
+                    if ($type === 'post' && $image) {
+                        echo '<img src="../postimage/' . $row['image'] . '" class="card-img-top" alt="Post image" style="width:500px" >';
+                    }
+                
+                    echo '
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <button class="btn btn-sm btn-link"><a href="answer.php?id=' . $id . '&type=' . $type . '">Answers</a></button>
+                                <button class="btn btn-sm btn-link">Upvote</button>
+                                <button class="btn btn-sm btn-link">Share</button>
+                            </div>
+                            <small class="text-muted">Posted by ' . $username . ' - ' . $created_at . '</small>
+                        </div>
+                    </div>';
+                }
             }
-            
-        }
        
             $conn->close();
             ?>
-    </div>       
-</div>
-<div class="container mt-4">
-    <div class="row">
-        <div class="col md-4">
-          
-        </div>
-        <div class="col-md-8">
-        <div class="horizontal-scroll-container">
-            <?php 
-                include "../connection.php";
-                
-                $sql = "SELECT * FROM category ;";
-                $stmt = $conn->prepare($sql);
-                $stmt->execute();
-                $result = $stmt->get_result();
-
-                while($row = $result->fetch_assoc()){
-                    $name =  $row['name'];
-                    $image = $row['image'];
-                    $id = $row['id'];
-                    $view = $row['view'];
-                    if($view) {
-                        echo '
-                            <div class="card">
-                                <img src="../images/' .$image .'" class="card-img-top" alt="category image">
-                                <div class="card-body">
-                                    <h5 class="card-title">'.$name.'</h5>
-                                    <a href="category_details.php?id='.$id.'" class="btn btn-primary btn-more">More</a>
-                                </div>
-                            </div>
-                        ';
-                    }
-                }
-            ?>
-        </div>
-        <button class="scroll-button" id="scroll-left">←</button>
-        <button class="scroll-button" id="scroll-right">→</button>
+        </div>       
     </div>
-</div>
-</div>
-</div>
-    <?php include "./footer.php"   ?>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-4">
+                <!-- Additional content can go here -->
+            </div>
+            <div class="col-md-8">
+                <div class="horizontal-scroll-container">
+                    <?php 
+                    include "../connection.php";
+                    
+                    $sql = "SELECT * FROM category;";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+
+                    while ($row = $result->fetch_assoc()) {
+                        $name = $row['name'];
+                        $image = $row['image'];
+                        $id = $row['id'];
+                        $view = $row['view'];
+                        if ($view) {
+                            echo '
+                                <div class="card">
+                                    <img src="../images/' . $image . '" class="card-img-top" alt="category image">
+                                    <div class="card-body">
+                                        <h5 class="card-title">' . $name . '</h5>
+                                        <a href="category_details.php?id=' . $id . '" class="btn btn-primary btn-more">More</a>
+                                    </div>
+                                </div>
+                            ';
+                        }
+                    }
+                    ?>
+                </div>
+                <button class="scroll-button" id="scroll-left">←</button>
+                <button class="scroll-button" id="scroll-right">→</button>
+            </div>
+        </div>
+    </div>
+
+    <?php include "./footer.php"; ?>
 </body>
 
 <script>
-        const scrollContainer = document.querySelector('.horizontal-scroll-container');
-        const scrollLeftButton = document.getElementById('scroll-left');
-        const scrollRightButton = document.getElementById('scroll-right');
+    const scrollContainer = document.querySelector('.horizontal-scroll-container');
+    const scrollLeftButton = document.getElementById('scroll-left');
+    const scrollRightButton = document.getElementById('scroll-right');
 
-        scrollLeftButton.addEventListener('click', () => {
-            scrollContainer.scrollBy({
-                left: -300, // Adjust scroll amount as needed
-                behavior: 'smooth'
-            });
+    scrollLeftButton.addEventListener('click', () => {
+        scrollContainer.scrollBy({
+            left: -300, // Adjust scroll amount as needed
+            behavior: 'smooth'
         });
+    });
 
-        scrollRightButton.addEventListener('click', () => {
-            scrollContainer.scrollBy({
-                left: 300, // Adjust scroll amount as needed
-                behavior: 'smooth'
-            });
+    scrollRightButton.addEventListener('click', () => {
+        scrollContainer.scrollBy({
+            left: 300, // Adjust scroll amount as needed
+            behavior: 'smooth'
         });
-    </script>
+    });
+</script>
 
 </html>

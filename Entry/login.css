@@ -13,7 +13,7 @@ body{
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    /* background: url('light-bulb-with-drawing-graph.jpg') no-repeat; */
+    /* background-image: url('students-academics-school-education-knowledge.jpg') no-repeat; */
     background-size: cover;
     background-position: center;
 }
@@ -38,11 +38,6 @@ body{
     width: 100%;
     padding: 40px;
 }
-
-.wrapper .form-box.login{
-    /* display: none; */
-  }
-
 
 
 .wrapper .form-box.register{

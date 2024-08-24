@@ -131,7 +131,6 @@
  <?php   
 
   if (!isset($_SESSION['username'])) {
-    // Redirect to login page if the user is not logged in
     header("Location: ../Entry/login.php");
     exit;
 }
